@@ -19,12 +19,19 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        if(update.hasMessage() && update.getMessage().hasText()){
+            String messageText = update.getMessage().getText();
 
+            switch (messageText) {
+                case "/start" -> System.out.println("It's working!!!");
+                default -> System.out.println("Unknown message");
+            }
+        }
     }
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
-        super.onUpdatesReceived(updates);
+        updates.forEach(this::onUpdateReceived);
     }
 
     @Override
