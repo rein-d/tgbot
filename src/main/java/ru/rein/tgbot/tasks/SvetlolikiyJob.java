@@ -1,4 +1,4 @@
-package ru.rein.tgbot.job;
+package ru.rein.tgbot.tasks;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,6 +13,6 @@ public class SvetlolikiyJob {
 
     @Scheduled(cron = "0 0 13 * * *")
     public void sendSvetlolikiyMessage() {
-
+        bot.sendChatRoulette();
     }
 }

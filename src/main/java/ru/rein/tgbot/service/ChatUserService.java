@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.rein.tgbot.entity.ChatUser;
 import ru.rein.tgbot.repository.ChatUserRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -20,5 +20,9 @@ public class ChatUserService {
         if (existingUser.isEmpty()) {
             chatUserRepository.save(new ChatUser(user.getId(), user.getFirstName(), chatId));
         }
+    }
+
+    public List<ChatUser> getUsers() {
+        return chatUserRepository.findAll();
     }
 }
