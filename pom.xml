@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.rein</groupId>
 	<artifactId>tgbot</artifactId>
-	<version>release</version>
+	<version>debug</version>
 	<name>tgbot</name>
 	<description>Svet ot svetlolikaga!</description>
 	<url/>
