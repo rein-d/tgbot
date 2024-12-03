@@ -16,9 +16,9 @@ public class ChatUserService {
 
     @Transactional
     public void saveNewUser(User user, Long chatId) {
-        var existingUser = chatUserRepository.findById(user.getId());
+        var existingUser = chatUserRepository.findChatUserByTgUserIdAndChatId(user.getId(), chatId);
         if (existingUser.isEmpty()) {
-            chatUserRepository.save(new ChatUser(user.getId(), user.getUserName(), chatId));
+            chatUserRepository.save(new ChatUser(null, user.getId(), user.getUserName(), chatId));
         }
     }
 

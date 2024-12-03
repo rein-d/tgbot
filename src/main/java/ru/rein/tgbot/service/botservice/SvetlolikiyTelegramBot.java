@@ -103,6 +103,8 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
         var chatId = update.getMessage().getChatId();
         var user = update.getMessage().getFrom();
 
+        log.info("Saving telegram user: {}", user);
+
         userService.saveNewUser(user, chatId);
         SendMessage sm = SendMessage.builder()
                 .chatId(chatId)
