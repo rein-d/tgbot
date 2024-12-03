@@ -42,9 +42,6 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
 
             log.info("TEXT: {}", messageText);
 
-            if (messageText.contains("@svet_ot_svetlalikaga_bot")) {
-                messageText = messageText.replace("@svet_ot_svetlalikaga_bot", "");
-            }
             switch (messageText) {
                 case "/start" -> sendHello(chatId, HELLO_MESSAGE);
                 case "/register" -> saveNewUser(update);
