@@ -1,6 +1,6 @@
 services:
   client-backend:
-    image: client:0.0.1
+    image: svetlolikiy:0.0.1
     build:
       context: .
       dockerfile: Dockerfile

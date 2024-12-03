@@ -1,5 +1,6 @@
 package ru.rein.tgbot.service.botservice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,16 +10,19 @@ import ru.rein.tgbot.config.BotConfig;
 import ru.rein.tgbot.entity.ChatUser;
 import ru.rein.tgbot.service.ChatUserService;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
 
-    private static final String HELLO_MESSAGE = "Пора, родной, пора..." +
-            "\nЕсли ты не ККК, то для приёма в ООСД необходимо ввести команду:\n/register" +
-            "\n\nКаждый день в 13:00 незабываемый розыгрыш призов!";
+    private static final String HELLO_MESSAGE = """
+            Пора, родной, пора...\
+            
+            Если ты не ККК, то для приёма в ООСД жми сюда:
+            
+            /register""";
 
     private final BotConfig tgConfig;
     private final ChatUserService userService;
@@ -36,8 +40,11 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
             var chatId = msg.getChatId();
             var messageText = msg.getText();
 
-            System.out.println("Msg: " + messageText + " ChatID: " + chatId + " message: " + messageText);
+            log.info("TEXT: {}", messageText);
 
+            if (messageText.contains("@svet_ot_svetlalikaga_bot")) {
+                messageText = messageText.replace("@svet_ot_svetlalikaga_bot", "");
+            }
             switch (messageText) {
                 case "/start" -> sendHello(chatId, HELLO_MESSAGE);
                 case "/register" -> saveNewUser(update);
@@ -80,13 +87,14 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
                     .chatId(chatId)
                     .text("Басуха в деле, родные! Всем по шляпе в кадык!")
                     .build();
-            SendMessage smRoulette = SendMessage.builder()
-                    .chatId(chatId)
-                    .text(getRouletteMessage(users))
-                    .build();
-
             sendMessage(smStart);
-            sendMessage(smRoulette);
+            getRouletteMessages(users).forEach(message -> {
+                SendMessage smRoulette = SendMessage.builder()
+                        .chatId(chatId)
+                        .text(message)
+                        .build();
+                sendMessage(smRoulette);
+            });
         });
 
     }
@@ -113,12 +121,16 @@ public class SvetlolikiyTelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private String getRouletteMessage(List<ChatUser> users) {
-        return "%s, тебе самую фиолетовую".formatted(
-                users.stream()
-                        .findAny()
-                        .map(ChatUser::getUsername)
-                        .orElse("Павлик")
-        );
+    private List<String> getRouletteMessages(List<ChatUser> users) {
+        Collections.shuffle(users);
+        List<String> templateMessages = new ArrayList<>();
+        List<String> resultMessages = new ArrayList<>();
+        templateMessages.add("@%s, тебе самую фиолетовую");
+        templateMessages.add("@%s, тебе с кусочками кала");
+
+        for (int i = 0; i < templateMessages.size(); i++) {
+            resultMessages.add(templateMessages.get(i).formatted(users.get(i).getUsername()));
+        }
+        return resultMessages;
     }
 }

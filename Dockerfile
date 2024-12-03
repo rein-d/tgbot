@@ -5,9 +5,9 @@
 #    && useradd --uid 999 --gid spring-app --shell /bin/bash --create-home spring-app
 #
 #USER spring-app:spring-app
-#WORKDIR /opt/my_build
+#WORKDIR /opt/build
 #
-#COPY ./tgbot-*.jar ./application.jar
+#COPY ./target/tgbot-*.jar ./application.jar
 #
 #RUN java -Djarmode=layertools -jar application.jar extract
 #RUN $JAVA_HOME/bin/jlink \

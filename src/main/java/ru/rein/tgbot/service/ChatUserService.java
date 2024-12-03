@@ -18,7 +18,7 @@ public class ChatUserService {
     public void saveNewUser(User user, Long chatId) {
         var existingUser = chatUserRepository.findById(user.getId());
         if (existingUser.isEmpty()) {
-            chatUserRepository.save(new ChatUser(user.getId(), user.getFirstName(), chatId));
+            chatUserRepository.save(new ChatUser(user.getId(), user.getUserName(), chatId));
         }
     }
 
