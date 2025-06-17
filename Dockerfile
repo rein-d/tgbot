@@ -78,9 +78,8 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Копируем JAR с фиксированным именем
-COPY --from=builder /app/target/app.jar ./app.jar
+# Копируем перепакованный JAR
+COPY --from=builder /app/app.jar ./app.jar
 
 EXPOSE 9000
-
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
