@@ -39,8 +39,8 @@ deploy:
   stage: deploy
   image: docker:20.10-git
   tags:
-    - docker
-#    - gitlab-org-docker
+#    - docker
+    - gitlab-org-docker
 #  variables:
 #    DOCKER_HOST: "ssh://${SERVER_USER}@${SERVER_HOST}"
 #  before_script:
