@@ -1,19 +1,20 @@
 services:
   client-backend:
-    image: svetlolikiy:0.0.1
+    container_name: tg_bot
+    image: registry.gitlab.com/my-test-project6/test-cicd-project:latest
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9000:9000"
+      - "9000:${TEST_SERVICE_PORT}"
     depends_on:
       - service-db
     environment:
-      - SERVER_PORT= 9000
+      - TEST_SERVICE_PORT=${TEST_SERVICE_PORT}
       - SPRING_DATASOURCE_URL=jdbc:postgresql://service-db/bot_db
 
   service-db:
-    image: postgres:16.3-alpine3.20
+    image: postgres:17.5-alpine3.22
     environment:
       POSTGRES_USER: svetlolikiy
       POSTGRES_PASSWORD: QwAs482@
