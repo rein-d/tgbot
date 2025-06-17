@@ -26,16 +26,17 @@ build:
   image:
     name: gcr.io/kaniko-project/executor:v1.9.2-debug
     entrypoint: [ "" ]
-  cache:
-    paths:
-      - .m2/repository
-      - target
-    key: $CI_COMMIT_REF_SLUG
   script:
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:latest"
+      --cache=true  # Включаем кэширование
+      --cache-repo ${CI_REGISTRY_IMAGE}/cache  # Репозиторий для кэша
+  cache: # Кэшируем зависимости Maven между запусками
+    key: ${CI_COMMIT_REF_SLUG}-maven
+    paths:
+      - ./.m2/repository
   only:
     - main
 
