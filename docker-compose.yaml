@@ -1,7 +1,7 @@
 services:
   client-backend:
     container_name: tg_bot
-    image: registry.gitlab.com/my-test-project6/test-cicd-project:latest
+    image: registry.gitlab.com/rein-d/tgbot:latest
     build:
       context: .
       dockerfile: Dockerfile
