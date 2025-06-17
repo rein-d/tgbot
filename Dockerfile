@@ -50,23 +50,28 @@
 #EXPOSE 9000
 #ENTRYPOINT ["java", "-jar", "/app/*.jar"]
 
-# Этап сборки с кэшированием Maven-зависимостей
+# Этап сборки с кэшированием зависимостей Maven
 FROM maven:3.9.9-eclipse-temurin-21-alpine as builder
 
 WORKDIR /app
 
-# 1. Копируем только POM-файл (для кэширования зависимостей)
+# 1. Копируем только POM-файл сначала (для кэширования зависимостей)
 COPY pom.xml .
 
-# 2. Скачиваем зависимости (этот слой кэшируется, пока pom.xml не меняется)
+# 2. Скачиваем все зависимости
 RUN mvn dependency:go-offline -B
 
 # 3. Копируем исходный код
 COPY src src
 
-# 4. Собираем приложение
+# 4. Собираем приложение с явным указанием главного класса
 RUN mvn package -Dmaven.test.skip=true -Dmaven.main.skip -Dmaven.source.skip && \
-    mv /app/target/*.jar /app/target/app.jar
+    # Находим главный класс в MANIFEST.MF
+    MAIN_CLASS=$(unzip -p target/*.jar META-INF/MANIFEST.MF | grep "Start-Class" | cut -d' ' -f2 | tr -d '\r') && \
+    # Перепаковываем JAR с явным указанием главного класса
+    echo "Main-Class: $MAIN_CLASS" > manifest.txt && \
+    jar xf target/*.jar && \
+    jar cfm app.jar manifest.txt org BOOT-INF META-INF
 
 # Финальный образ
 FROM eclipse-temurin:21-jre-alpine
