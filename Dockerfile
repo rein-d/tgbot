@@ -1,8 +1,8 @@
 FROM eclipse-temurin:21-jdk as builder
 ENV RELEASE=21
 
-RUN groupadd --gid 999 spring-app \
-    && useradd --uid 999 --gid spring-app --shell /bin/bash --create-home spring-app
+RUN groupadd --gid 1500 spring-app \
+    && useradd --uid 1500 --gid spring-app --shell /bin/bash --create-home spring-app
 
 USER spring-app:spring-app
 WORKDIR /opt/build
@@ -24,8 +24,8 @@ ARG BUILD_PATH=/opt/build
 ENV JAVA_HOME=/opt/jdk
 ENV PATH=${JAVA_HOME}/bin:${PATH}
 
-RUN groupadd --gid 999 spring-app \
-    && useradd --uid 999 --gid spring-app --shell /bin/bash --create-home spring-app
+RUN groupadd --gid 1500 spring-app \
+    && useradd --uid 1500 --gid spring-app --shell /bin/bash --create-home spring-app
 
 USER spring-app:spring-app
 WORKDIR /opt/workspace
