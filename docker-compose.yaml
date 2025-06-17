@@ -6,24 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9000:${TEST_SERVICE_PORT}"
-    depends_on:
-      - service-db
+      - "9000:9000"
     environment:
-      - TEST_SERVICE_PORT=${TEST_SERVICE_PORT}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://service-db/bot_db
-
-  service-db:
-    image: postgres:17.5-alpine3.22
-    environment:
-      POSTGRES_USER: svetlolikiy
-      POSTGRES_PASSWORD: QwAs482@
-      POSTGRES_DB: bot_db
-    ports:
-      - "15432:5432"
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-volumes:
-  db-data:
+      - SERVER_PORT=9000
