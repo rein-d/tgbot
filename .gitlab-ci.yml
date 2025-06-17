@@ -37,7 +37,7 @@ build:
 
 deploy:
   stage: deploy
-  image: docker:stable
+  image: docker:20.10-git
   tags:
     - docker
 #    - gitlab-org-docker
