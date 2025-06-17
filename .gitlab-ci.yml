@@ -10,12 +10,7 @@ build-only-MR:
     name: gcr.io/kaniko-project/executor:v1.9.2-debug
     entrypoint: [""]
   script:
-    - /kaniko/executor
-    - --context=${CI_PROJECT_DIR}
-    - --dockerfile=${CI_PROJECT_DIR}/Dockerfile
-    - --no-push
-    - --cache=true
-    - --cache-repo=${CI_REGISTRY_IMAGE}/cache
+    - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile" --destination "${CI_REGISTRY_IMAGE}:latest" --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
   cache:
     key: ${CI_COMMIT_REF_SLUG}-maven
     paths:
@@ -31,12 +26,7 @@ build:
     name: gcr.io/kaniko-project/executor:v1.9.2-debug
     entrypoint: [""]
   script:
-    - /kaniko/executor
-    - --context=${CI_PROJECT_DIR}
-    - --dockerfile=${CI_PROJECT_DIR}/Dockerfile
-    - --destination=${CI_REGISTRY_IMAGE}:latest
-    - --cache=true
-    - --cache-repo=${CI_REGISTRY_IMAGE}/cache
+    - /kaniko/executor --context "${CI_PROJECT_DIR}" --dockerfile "${CI_PROJECT_DIR}/Dockerfile" --destination "${CI_REGISTRY_IMAGE}:latest" --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
   cache:
     key: ${CI_COMMIT_REF_SLUG}-maven
     paths:
