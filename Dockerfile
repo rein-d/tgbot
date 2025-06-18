@@ -12,30 +12,15 @@
 
 # Этап сборки с кэшированием зависимостей Maven
 FROM maven:3.9.9-eclipse-temurin-21-alpine as builder
+RUN mkdir -p /home/app
+WORKDIR /home/app
 
-WORKDIR /app
 
-# 1. Копируем только POM-файл сначала (для кэширования зависимостей)
-COPY pom.xml .
+ADD pom.xml /home/app
+ADD src /home/app/src
 
-# 2. Скачиваем все зависимости (этот слой кэшируется, пока pom.xml не меняется)
-RUN mvn dependency:go-offline -B
 
-# 3. Копируем исходный код
-COPY src src
-
-# 4. Собираем приложение (используем кэшированные зависимости)
-RUN mvn package -Dmaven.test.skip=true -Dmaven.main.skip -Dmaven.source.skip -Dspring-boot.repackage.skip=true && \
-    find /app/target -name '*.jar' -exec mv {} /app/target/app.jar \;
-
-# Финальный образ
-FROM eclipse-temurin:21-jre-alpine
-
-WORKDIR /app
-
-# Копируем JAR с фиксированным именем
-COPY --from=builder /app/target/app.jar ./app.jar
-
+RUN mvn clean package
 EXPOSE 9000
 
 # Используем форму JSON-массива для ENTRYPOINT
