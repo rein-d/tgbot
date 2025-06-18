@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk as builder
+FROM eclipse-temurin:21-jdk AS builder
 ENV RELEASE=21
 
 RUN groupadd --gid 1500 spring-app \
@@ -7,7 +7,7 @@ RUN groupadd --gid 1500 spring-app \
 USER spring-app:spring-app
 WORKDIR /opt/build
 
-COPY ./target/*.jar ./application.jar
+COPY ./target/tgbot-debug.jar ./application.jar
 
 RUN java -Djarmode=layertools -jar application.jar extract
 RUN $JAVA_HOME/bin/jlink \
@@ -24,8 +24,8 @@ ARG BUILD_PATH=/opt/build
 ENV JAVA_HOME=/opt/jdk
 ENV PATH=${JAVA_HOME}/bin:${PATH}
 
-RUN groupadd --gid 1500 spring-app \
-    && useradd --uid 1500 --gid spring-app --shell /bin/bash --create-home spring-app
+RUN groupadd --gid 1600 spring-app \
+    && useradd --uid 1600 --gid spring-app --shell /bin/bash --create-home spring-app
 
 USER spring-app:spring-app
 WORKDIR /opt/workspace
