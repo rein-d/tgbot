@@ -11,7 +11,7 @@ public class HelloWorldController {
 
     @GetMapping("hello")
     public ResponseEntity<String> getTest() {
-        return ResponseEntity.ok("Hello world, part 5!");
+        return ResponseEntity.ok("Hello world, part 6!");
     }
 
 }
