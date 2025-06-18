@@ -51,22 +51,30 @@
 #ENTRYPOINT ["java", "-jar", "/app/*.jar"]
 
 # Этап сборки с кэшированием Maven-зависимостей
+# Этап сборки с кэшированием зависимостей
 FROM maven:3.9.9-eclipse-temurin-21-alpine as builder
+
 WORKDIR /app
-# 1. Копируем только POM-файл (для кэширования зависимостей)
+
+# Копируем только POM-файл (для кэширования зависимостей)
 COPY pom.xml .
-# 2. Скачиваем зависимости (этот слой кэшируется, пока pom.xml не меняется)
-RUN mvn dependency:go-offline -B
-# 3. Копируем исходный код
+
+# Скачиваем зависимости (кэшируемый слой)
+RUN mvn -B dependency:go-offline
+
+# Копируем исходный код
 COPY src src
-# 4. Собираем приложение
-RUN mvn package -Dmaven.test.skip=true && \
-    mv /app/target/*.jar /app/target/app.jar
+
+# Собираем приложение
+RUN mvn -B package -Dmaven.test.skip=true
 
 # Финальный образ
 FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
-# Копируем JAR с фиксированным именем
-COPY --from=builder /app/target/app.jar ./app.jar
+
+# Копируем JAR из builder-стадии
+COPY --from=builder /app/target/*.jar ./app.jar
+
 EXPOSE 9000
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
