@@ -7,7 +7,7 @@ RUN groupadd --gid 1500 spring-app \
 USER spring-app:spring-app
 WORKDIR /opt/build
 
-COPY ./target/tgbot-*.jar ./application.jar
+COPY ./target/*.jar ./application.jar
 
 RUN java -Djarmode=layertools -jar application.jar extract
 RUN $JAVA_HOME/bin/jlink \
