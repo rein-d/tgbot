@@ -3,5 +3,6 @@
 *.iml
 .idea
 *.md
+target
 Dockerfile
 .gitlab-ci.yml
