@@ -15,7 +15,3 @@ spring:
     username: svetlolikiy
     password: QwAs482@
     url: jdbc:postgresql://192.168.1.14:5432/bot_db
-
-bot:
-  name: SvetOtSvetlolikaga
-  token: 7802005182:AAFPMpfz3yhzpWM85drHgdBpKcC9vLcKt6s
