@@ -12,6 +12,6 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: svetlolikiy
-    password: QwAs482@
-    url: jdbc:postgresql://192.168.1.14:5432/bot_db
+    username: dreynpostgres
+    password: zXsA391!
+    url: jdbc:postgresql://192.168.31.59:5432/mypostgresdb
