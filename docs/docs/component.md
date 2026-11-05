@@ -1,19 +1,30 @@
 ```plantuml
 @startuml
-title FitLife Context Diagram
+title FitLife Web Application Component Diagram
+
+top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Person(user, "Пользователь", "Клиент фитнес-клуба")
-Person(admin, "Администратор", "Сотрудник, управляющий системой")
+Container_Boundary(FitLifeSystem, "FitLife System") {
+  Container(WebApp, "Web Application", "Java, Spring", "Handles user interactions")
+  Container(Database, "Database", "PostgreSQL", "Stores user data and schedules")
+}
 
-System(fitlife, "FitLife", "Система управления фитнес-клубом")
+Container(WebApp, "Web Application", "Java, Spring") {
+  Component(AuthController, "AuthController", "Handles authentication and authorization")
+  Component(UserController, "UserController", "Manages user profiles")
+  Component(ScheduleController, "ScheduleController", "Manages schedules")
+  Component(PaymentController, "PaymentController", "Handles payment processing")
+  Component(ServiceLayer, "Service Layer", "Business logic")
+  Component(RepositoryLayer, "Repository Layer", "Data access logic")
+}
 
-System_Ext(bank, "Банковская система", "Обработка платежей")
-System_Ext(fitnessAPI, "Fitness API", "Внешний сервис фитнес-данных")
-
-Rel(user, fitlife, "Использует", "Telegram Bot")
-Rel(admin, fitlife, "Управляет", "Web UI")
-Rel(fitlife, bank, "Отправляет платежи", "HTTPS/JSON")
-Rel(fitlife, fitnessAPI, "Получает данные", "REST API")
+Rel(AuthController,ServiceLayer,"Calls business logic")
+Rel(UserController,ServiceLayer,"Calls business logic")
+Rel(ScheduleController,ServiceLayer,"Calls business logic")
+Rel(PaymentController,ServiceLayer,"Calls business logic")
+Rel(ServiceLayer,RepositoryLayer,"Reads/Writes data")
+Rel(RepositoryLayer,Database,"Reads/Writes user data")
 @enduml
+```
