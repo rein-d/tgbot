@@ -1,17 +1,19 @@
-# Context Diagram
-
 ```plantuml
 @startuml
 title FitLife Context Diagram
-top to bottom direction
 
-!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Contex.puml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
 
-Person(user, "User", "A user of the fitness club system")
-System(fitlife, "FitLife System", "Manages memberships and payments")
-System_Ext(bank, "Bank System", "Processes payments")
+Person(user, "Пользователь", "Клиент фитнес-клуба")
+Person(admin, "Администратор", "Сотрудник, управляющий системой")
 
-Rel(user, fitlife, "Uses")
-Rel(fitlife, bank, "Pays via")
+System(fitlife, "FitLife", "Система управления фитнес-клубом")
+
+System_Ext(bank, "Банковская система", "Обработка платежей")
+System_Ext(fitnessAPI, "Fitness API", "Внешний сервис фитнес-данных")
+
+Rel(user, fitlife, "Использует", "Telegram Bot")
+Rel(admin, fitlife, "Управляет", "Web UI")
+Rel(fitlife, bank, "Отправляет платежи", "HTTPS/JSON")
+Rel(fitlife, fitnessAPI, "Получает данные", "REST API")
 @enduml
-```
